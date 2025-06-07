@@ -30,7 +30,7 @@ public class Board : MonoBehaviour
         List<Sprite> ListRandom = new List<Sprite>();
         int pairCount = (rows * cols) / 2;
 
-        for(int i  = 0; i < pairCount; i++)
+        for (int i = 0; i < pairCount; i++)
         {
             Sprite Symbol = listCard[i];
             ListRandom.Add(Symbol);
@@ -48,7 +48,7 @@ public class Board : MonoBehaviour
                     pos.y + i * spacingY// 3 //5
                     );
                 GameObject newCard = Instantiate(card, position, Quaternion.identity, cardParent);
-                Cards sr = newCard.GetComponent<Cards>();
+                Card sr = newCard.GetComponent<Card>();
                 if (sr != null)
                 {
                     sr.backSprite = cardBackSprite;
@@ -58,12 +58,12 @@ public class Board : MonoBehaviour
             }
         }
 
-        
+
     }
 
     void ShuffleList<T>(List<T> list)
     {
-        for (int i = 0; i<list.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             int rand = Random.Range(i, list.Count);
             T Temp = list[i];
