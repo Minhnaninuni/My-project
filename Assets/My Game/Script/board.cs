@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
+using static UnityEngine.ParticleSystem;
 using System.Collections;
 
 public class Board : MonoBehaviour
@@ -7,7 +8,7 @@ public class Board : MonoBehaviour
     [Header("Card Setup")]
     public GameObject cardPrefab;
     public Transform cardsParent;
-    public List<Sprite> listCards;
+    public List<Sprite> cardSymbols;
     public Sprite cardBackSprite;
 
     [Header("Grid Setup")]
@@ -16,63 +17,63 @@ public class Board : MonoBehaviour
     public float spacingX = 2f;
     public float spacingY = 2f;
     public Vector2 startPosition = new Vector2(-6f, 3f);
-
     private Card firstCard;
     private Card secondCard;
-
+    public AudioSource AudioSource;
+    private int score = 0;
     void Start()
     {
         CreateGrid();
+        AudioSource = GetComponent<AudioSource>();
     }
-
 
 
     void CreateGrid()
     {
-        List<Sprite> listRandom = new List<Sprite>();
-        int pairCount = (rows * cols) / 2;
+
+        List<Sprite> randomizedSymbols = new List<Sprite>();
+        int pairCount = (rows * cols) / 2;//16 pt => 8 cặp
 
         for (int i = 0; i < pairCount; i++)
         {
-            Sprite Symbol = listCards[i];
-            listRandom.Add(Symbol);
-            listRandom.Add(Symbol);
+            Sprite symbol = cardSymbols[i];
+            randomizedSymbols.Add(symbol);
+            randomizedSymbols.Add(symbol);
         }
-        ShuffleList(listRandom);
+
+
+        ShuffleList(randomizedSymbols);
+        
         int index = 0;
-        for (int i = 0; i < rows; i++)
+        for (int row = 0; row < rows; row++)
         {
-            for (int j = 0; j < cols; j++)
+            for (int col = 0; col < cols; col++)
             {
                 Vector2 position = new Vector2(
-                    startPosition.x + j * spacingX,// -4 // -2 // 0
-                    startPosition.y - i * spacingY// 3 //5
-                    );
+                    startPosition.x + col * spacingX,
+                    startPosition.y - row * spacingY
+                );
                 GameObject newCard = Instantiate(cardPrefab, position, Quaternion.identity, cardsParent);
-                Card sr = newCard.GetComponent<Card>();
-                if (sr != null)
-                {   
-                    sr.backSprite = cardBackSprite;
-                    sr.frontSprite = listRandom[index];
+                Card cardScript = newCard.GetComponent<Card>();
+                if (cardScript != null)
+                {
+                    cardScript.backSprite = cardBackSprite;
+                    cardScript.frontSprite = randomizedSymbols[index];
                 }
                 index++;
             }
         }
-
-
     }
-
     void ShuffleList<T>(List<T> list)
     {
         for (int i = 0; i < list.Count; i++)
         {
             int rand = Random.Range(i, list.Count);
-            T Temp = list[i];
+            T temp = list[i];
             list[i] = list[rand];
-            list[rand] = Temp;
+            list[rand] = temp;
         }
     }
-
     public void CardRevealed(Card card)
     {
         if (firstCard == null)
@@ -85,14 +86,17 @@ public class Board : MonoBehaviour
             StartCoroutine(CheckMatch());
         }
     }
-
     private IEnumerator CheckMatch()
     {
-        yield return new WaitForSecond(1f);
-        if (firstCard.frontSpirte == secondCard.frontSpirte)
+        yield return new WaitForSeconds(1f);
+
+        if (firstCard.frontSprite == secondCard.frontSprite)
         {
             firstCard.isMatched = true;
             secondCard.isMatched = true;
+            score += 2;
+            Debug.Log(score);
+            
         }
         else
         {

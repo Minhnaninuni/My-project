@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Card : MonoBehaviour
 {
@@ -21,19 +21,19 @@ public class Card : MonoBehaviour
     {
         if (isMatched || isFlipped) return;
         FlipUp();
-        FindObjectOfType<Board>().CardRevealed(this);
+        Object.FindFirstObjectByType<Board>().CardRevealed(this);
     }
 
     public void FlipUp()
     {
-        sr.sprite = frontSprite;
+        sr.sprite = frontSprite;  // Show front
         isFlipped = true;
-        audio.PlayOneShot(audio1);
+        audio.PlayOneShot(audio1); 
     }
 
     public void FlipDown()
     {
-        sr.sprite = backSprite;
+        sr.sprite = backSprite;   // Show back
         isFlipped = false;
         audio.PlayOneShot(audio1);
     }
