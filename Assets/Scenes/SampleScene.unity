@@ -300,17 +300,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2cca1be06b5e1c4c9e01896a61d09cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 5165562235280108978, guid: dc07a30ea775cd14ea1dff979665e82b, type: 3}
-  cardParent: {fileID: 784022984}
-  cardBackSprite: {fileID: 21300000, guid: b7ac8d6de5877a84699b7fd4ad629fb3, type: 3}
-  listCard:
+  cardPrefab: {fileID: 5165562235280108978, guid: dc07a30ea775cd14ea1dff979665e82b, type: 3}
+  cardsParent: {fileID: 784022984}
+  listCards:
   - {fileID: 21300000, guid: 350b8df3474ca10479a1fa3263a4033c, type: 3}
   - {fileID: 21300000, guid: d17dc73ffc7680a4e873a560924205b1, type: 3}
+  cardBackSprite: {fileID: 21300000, guid: b7ac8d6de5877a84699b7fd4ad629fb3, type: 3}
   rows: 2
   cols: 2
   spacingX: 2
   spacingY: 2
-  pos: {x: -6, y: 3}
+  startPosition: {x: 0, y: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

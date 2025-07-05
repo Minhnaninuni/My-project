@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frontSprite: {fileID: 21300000, guid: 350b8df3474ca10479a1fa3263a4033c, type: 3}
   backSprite: {fileID: 21300000, guid: b7ac8d6de5877a84699b7fd4ad629fb3, type: 3}
+  audio1: {fileID: 8300000, guid: 1276d0e39e261814c8faee0a2a0c5d97, type: 3}
+  isMatched: 0
 --- !u!212 &2688616079002461142
 SpriteRenderer:
   m_ObjectHideFlags: 0

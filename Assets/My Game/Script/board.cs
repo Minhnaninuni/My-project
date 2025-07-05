@@ -1,58 +1,59 @@
-
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 public class Board : MonoBehaviour
 {
     [Header("Card Setup")]
-    public GameObject card;
-    public Transform cardParent;
+    public GameObject cardPrefab;
+    public Transform cardsParent;
+    public List<Sprite> listCards;
     public Sprite cardBackSprite;
-    public List<Sprite> listCard;
 
     [Header("Grid Setup")]
     public int rows = 4;
     public int cols = 4;
     public float spacingX = 2f;
     public float spacingY = 2f;
-    public Vector2 pos = new Vector2(-6f, 3f);
+    public Vector2 startPosition = new Vector2(-6f, 3f);
 
+    private Card firstCard;
+    private Card secondCard;
 
-    // Start is called before the first frame update
     void Start()
     {
         CreateGrid();
     }
 
-    // Update is called once per frame
+
+
     void CreateGrid()
     {
-        List<Sprite> ListRandom = new List<Sprite>();
+        List<Sprite> listRandom = new List<Sprite>();
         int pairCount = (rows * cols) / 2;
 
         for (int i = 0; i < pairCount; i++)
         {
-            Sprite Symbol = listCard[i];
-            ListRandom.Add(Symbol);
-            ListRandom.Add(Symbol);
+            Sprite Symbol = listCards[i];
+            listRandom.Add(Symbol);
+            listRandom.Add(Symbol);
         }
-        ShuffleList(ListRandom);
+        ShuffleList(listRandom);
         int index = 0;
-
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
             {
                 Vector2 position = new Vector2(
-                    pos.x + j * spacingX,// -4 // -2 // 0
-                    pos.y + i * spacingY// 3 //5
+                    startPosition.x + j * spacingX,// -4 // -2 // 0
+                    startPosition.y - i * spacingY// 3 //5
                     );
-                GameObject newCard = Instantiate(card, position, Quaternion.identity, cardParent);
+                GameObject newCard = Instantiate(cardPrefab, position, Quaternion.identity, cardsParent);
                 Card sr = newCard.GetComponent<Card>();
                 if (sr != null)
-                {
+                {   
                     sr.backSprite = cardBackSprite;
-                    sr.frontSprite = ListRandom[index];
+                    sr.frontSprite = listRandom[index];
                 }
                 index++;
             }
@@ -72,5 +73,33 @@ public class Board : MonoBehaviour
         }
     }
 
+    public void CardRevealed(Card card)
+    {
+        if (firstCard == null)
+        {
+            firstCard = card;
+        }
+        else if (secondCard == null)
+        {
+            secondCard = card;
+            StartCoroutine(CheckMatch());
+        }
+    }
 
+    private IEnumerator CheckMatch()
+    {
+        yield return new WaitForSecond(1f);
+        if (firstCard.frontSpirte == secondCard.frontSpirte)
+        {
+            firstCard.isMatched = true;
+            secondCard.isMatched = true;
+        }
+        else
+        {
+            firstCard.FlipDown();
+            secondCard.FlipDown();
+        }
+        firstCard = null;
+        secondCard = null;
+    }
 }

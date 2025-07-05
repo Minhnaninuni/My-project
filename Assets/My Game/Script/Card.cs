@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Card : MonoBehaviour
@@ -9,33 +7,35 @@ public class Card : MonoBehaviour
     private SpriteRenderer sr;
     private bool isFlipped = false;
     public AudioClip audio1;
-    private AudioSource audio;
+    private new AudioSource audio;
+    public bool isMatched = false;
+
 
     void Start()
     {
         audio = GetComponent<AudioSource>();
         sr = GetComponent<SpriteRenderer>();
-            sr.sprite = backSprite;
+        sr.sprite = backSprite;
     }
     private void OnMouseDown()
     {
-        FlipCard();
-    }
-    public void FlipCard()
-    {
-        if (isFlipped)
-        {
-            sr.sprite = backSprite;
-            isFlipped = false;
-            audio.PlayOneShot(audio1);
-        }
-        else
-        {
-            sr.sprite = frontSprite;
-            isFlipped = true;
-            audio.PlayOneShot(audio1);
-        }
+        if (isMatched || isFlipped) return;
+        FlipUp();
+        FindObjectOfType<Board>().CardRevealed(this);
     }
 
+    public void FlipUp()
+    {
+        sr.sprite = frontSprite;
+        isFlipped = true;
+        audio.PlayOneShot(audio1);
+    }
+
+    public void FlipDown()
+    {
+        sr.sprite = backSprite;
+        isFlipped = false;
+        audio.PlayOneShot(audio1);
+    }
 
 }
